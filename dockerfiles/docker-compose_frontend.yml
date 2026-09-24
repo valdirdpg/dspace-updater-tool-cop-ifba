@@ -11,15 +11,21 @@
 # for example via 'docker-compose-rest.yml'
 version: '3.7'
 networks:
-  dspacenet:
+  dspacenetwork:
 services:
-  dspace7-angular:
-    container_name: dspace7-angular
+  dspace8-angular:
+    container_name: dspace8-angular
     environment:
       DSPACE_UI_SSL: 'false'
-      DSPACE_UI_HOST: '192.169.5.126'
-      DSPACE_UI_PORT: '5000'
+      # DSPACE_UI_HOST is the bind address of the internal dev server.
+      # It MUST be 0.0.0.0 so the container listens on all interfaces and works
+      # behind a reverse proxy / when accessed by a DNS name. Do NOT put the
+      # public hostname here, otherwise the dev server only answers on that IP.
+      DSPACE_UI_HOST: '0.0.0.0'
+      DSPACE_UI_PORT: '4000'
       DSPACE_UI_NAMESPACE: /
+      # DSPACE_REST_* must point to an address the END USER's browser can reach.
+      # Behind a reverse proxy with SSL this is the public https endpoint.
       DSPACE_REST_SSL: 'false'
       DSPACE_REST_HOST: '192.169.5.126'
       DSPACE_REST_PORT: '9080'
@@ -30,7 +36,7 @@ services:
       context: ..
       dockerfile: Dockerfile
     networks:
-      dspacenet:
+      dspacenetwork:
     ports:
     - published: 4000
       target: 4000
@@ -38,3 +44,6 @@ services:
     tty: true
     extra_hosts:
       - "host.docker.internal:host-gateway"
+      # PT_BR: Placeholder substituido pelo frontend_build.sh para o SSR resolver o dominio publico do REST.
+      # EN: Placeholder replaced by frontend_build.sh so the SSR can resolve the public REST domain.
+      - "REVERSE_PROXY_HOST_ENTRY"

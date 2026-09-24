@@ -9,7 +9,7 @@ Autor: Márcio Gurgel (marcio.rga@gmail.com)
 # EN (Portuguse bellow)
 
 # About
-This tool upgrades any DSpace 4, 5 or 6 to the latest DSpace 7.6, with (much) less need of human intervention.
+This tool upgrades any DSpace 4, 5 or 6 to the latest DSpace 8.1, with (much) less need of human intervention.
 
 To use this tool, all you need is: a docker environment, a copy of "dspace-dir" form the old DSpace, a postgres dump from old DSpace;
 
@@ -47,7 +47,7 @@ To use this tool, all you need is: a docker environment, a copy of "dspace-dir" 
 - Add extra configuration to the file `[DSPACE_UPGRADE_TOOL]/local.cfg`, as email credentials, and so on;
   - As root user, run the script: 
   ```shell
-     ./upgrade-to-dspace7.sh
+     ./upgrade-to-dspace8.sh
   ```
 
 > [!IMPORTANT]
@@ -62,8 +62,8 @@ To use this tool, all you need is: a docker environment, a copy of "dspace-dir" 
 ### Making changes in DSpace 7
 
 ### Front-end (angular)
-- If you've set a git repo for your angular interface, this tool will `pull` the new code and re-compile the source in `[DSPACE_UPGRADE_TOOL]/source/dspace-angular-dspace-7.6`;
-- If you haven't set a git repo for your angular interface this tool will just recompile the source in  `[DSPACE_UPGRADE_TOOL]/source/dspace-angular-dspace-7.6`;
+- If you've set a git repo for your angular interface, this tool will `pull` the new code and re-compile the source in `[DSPACE_UPGRADE_TOOL]/source/dspace-angular-dspace-8.1`;
+- If you haven't set a git repo for your angular interface this tool will just recompile the source in  `[DSPACE_UPGRADE_TOOL]/source/dspace-angular-dspace-8.1`;
 - Tô recompile your angular interface, just run  `./restart-frontend.sh`
 
 ### Backend
@@ -76,13 +76,13 @@ All logs will by written in: `[DSPACE_UPGRADE_TOOL]/execution.log`
 ## Additional informations about the new DSpace instalation
 
 - The new "DSpace DIR" will be: `[DSPACE_UPGRADE_TOOL]/dspace-install-dir`, consider it for backup;
-- Backup the database using the following command (fullfill DEST_DIR):  ```docker exec -t dspace7db pg_dump -c -U postgres dspace > [DEST_DIR]/dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql```
+- Backup the database using the following command (fullfill DEST_DIR):  ```docker exec -t dspace8db pg_dump -c -U postgres dspace > [DEST_DIR]/dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql```
 
 ## Commum issues
 
 ### Error 500 in angular interface
 - Verify if you are accessing the interface by the same address you've registered in `[DSPACE_UPGRADE_TOOL]/upgrade-variables.properties`;
-- Verify if the address shown by the command `docker exec -it dspace7 cat /dspace/config/local.cfg | grep  dspace.ui.url` is the same registred in `[DSPACE_UPGRADE_TOOL]/upgrade-variables.properties`. If not, correct the variables and run again the script `./upgrade-to-dspace7.sh` again.
+- Verify if the address shown by the command `docker exec -it dspace8 cat /dspace/config/local.cfg | grep  dspace.ui.url` is the same registred in `[DSPACE_UPGRADE_TOOL]/upgrade-variables.properties`. If not, correct the variables and run again the script `./upgrade-to-dspace8.sh` again.
 ### White screen
 - Verify if the provided address of IP and Port are accessible from browser
 
@@ -91,7 +91,7 @@ All logs will by written in: `[DSPACE_UPGRADE_TOOL]/execution.log`
 # PT_BR
 
 # Sobre
-Esta ferramenta instala um novo DSpace 7 ou atualiza qualquer DSpace nas versões 4, 5 ou 6 para a versão 7.6 com pouca necessidade de intervenção humana.
+Esta ferramenta instala um novo DSpace 7 ou atualiza qualquer DSpace nas versões 4, 5 ou 6 para a versão 8.1 com pouca necessidade de intervenção humana.
 
 ## O que a ferramenta faz?
 
@@ -108,13 +108,14 @@ Esta ferramenta instala um novo DSpace 7 ou atualiza qualquer DSpace nas versõe
 
 ### Para instalar um novo DSpace
 - Instale os comandos "docker" e "docker compose" no seu servidor;
-- Copie e cole o arquivo `[DSPACE_UPGRADE_TOOL]/ibict_upgrade-variables.properties.EXAMPLE` para `[DSPACE_UPGRADE_TOOL]/ibict_upgrade-variables.properties`;
-- Preencha o arquivo `[DSPACE_UPGRADE_TOOL]/ibict_upgrade-variables.properties` .
+- Copie e cole o arquivo `[DSPACE_UPGRADE_TOOL]/install-variables.properties.EXAMPLE` para `[DSPACE_UPGRADE_TOOL]/install-variables.properties`;
+- Preencha o arquivo `[DSPACE_UPGRADE_TOOL]/install-variables.properties` .
+- Copie o arquivo `[DSPACE_UPGRADE_TOOL]/local.cfg.EXAMPLE` para `[DSPACE_UPGRADE_TOOL]/local.cfg`.
 - Adicione configurações adicionais no arquivo `local.cfg`, como informações para envio de e-mail, etc.
-- Rode o script `./create-dspace7.sh`
+- Rode o script `./create-dspace8.sh`
   - Caso ocorra algum problema com o preenchimento das variáveis, efetue a correção e rode o script novamente.
 - Aguarde o processamento, o tempo de processamento irá depender do desempenho do servidor, ao final você será soliciado a criar um novo usuário;
-- Acesse a interface do DSpace utilizando os endereços inseridos no arquivo `[DSPACE_UPGRADE_TOOL]/ibict_upgrade-variables.properties`.
+- Acesse a interface do DSpace utilizando os endereços inseridos no arquivo `[DSPACE_UPGRADE_TOOL]/install-variables.properties`.
 
 
 
@@ -127,9 +128,10 @@ Esta ferramenta instala um novo DSpace 7 ou atualiza qualquer DSpace nas versõe
 - Copie o diretório de instalação do DSpace antigo para o servidor onde o DSpace 7 irá rodar. Os diretórios obrigatórios são: config, assetstore, webapps e solr.
 - Copie o arquivo `[DSPACE_UPGRADE_TOOL]/upgrade-variables.properties.EXAMPLE` para [DSPACE_UPGRADE_TOOL]/upgrade-variables.properties.
 - Preencha o arquivo `[DSPACE_UPGRADE_TOOL]/upgrade-variables.properties` .
-  - Caso você já possua um repositório GIT com seu DSpace 7.6, informe o endereço neste arquivo, a ferramenta irá fazer o clone ao invés de fazer download do zip do repositório do DSpace original.  
+  - Caso você já possua um repositório GIT com seu DSpace 8.1, informe o endereço neste arquivo, a ferramenta irá fazer o clone ao invés de fazer download do zip do repositório do DSpace original.  
+- Copie o arquivo `[DSPACE_UPGRADE_TOOL]/local.cfg.EXAMPLE` para `[DSPACE_UPGRADE_TOOL]/local.cfg`.
 - Adicione configurações adicionais no arquivo `local.cfg`, como informações para envio de e-mail, etc.
-- Com o usuário root, rode o script `upgrade-to-dspace7.sh`
+- Com o usuário root, rode o script `upgrade-to-dspace8.sh`
   - Caso ocorra algum problema com o preenchimento das variáveis, efetue a correção e rode o script novamente.
 
 - Aguarde o processamento, o tempo de processamento irá depender do desempenho do servidor;
@@ -140,8 +142,8 @@ Esta ferramenta instala um novo DSpace 7 ou atualiza qualquer DSpace nas versõe
 ## Procedimento para aplicar mudanças no DSpace 7
 
 ### Front-end (angular)
-- Caso você tenha especificado um repositório git para sua interface angular, no arquivo `upgrade-variables.properties` esta ferramenta fará o `pull` do novo código e recompilar o código-fonte localizado em:  `[DSPACE_UPGRADE_TOOL]/source/dspace-angular-dspace-7.6`;
-- Caso você não tenha informado um repositório Git, esta ferramenta irá apenar recompilar o código presente em: `[DSPACE_UPGRADE_TOOL]/source/dspace-angular-dspace-7.6`;
+- Caso você tenha especificado um repositório git para sua interface angular, no arquivo `upgrade-variables.properties` esta ferramenta fará o `pull` do novo código e recompilar o código-fonte localizado em:  `[DSPACE_UPGRADE_TOOL]/source/dspace-angular-dspace-8.1`;
+- Caso você não tenha informado um repositório Git, esta ferramenta irá apenar recompilar o código presente em: `[DSPACE_UPGRADE_TOOL]/source/dspace-angular-dspace-8.1`;
 - Para recompilar a interface, execute:  `./restart-frontend.sh`
 
 ### Backend
@@ -153,13 +155,13 @@ Esta ferramenta instala um novo DSpace 7 ou atualiza qualquer DSpace nas versõe
 ## Informações adicionais sobre a instalação
 
 - O diretório de instalação do DSpace será [DSPACE_UPGRADE_TOOL]/dspace-install-dir, considere esta pasta para backup;
-- O banco de dados pode receber backup pelo comando: ```docker exec -t dspace7db pg_dump -c -U postgres dspace > [DEST_DIR]/dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql```
+- O banco de dados pode receber backup pelo comando: ```docker exec -t dspace8db pg_dump -c -U postgres dspace > [DEST_DIR]/dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql```
 
 ## Problemas comuns
 
 ### Erro 500 na tela
 - Verifique se está acessando o DSpace pelo endereço cadastrado no arquivo `[DSPACE_UPGRADE_TOOL]/upgrade-variables.properties`
-- Verifique se o endereço retornado pelo comando `docker exec -it dspace7 cat /dspace/config/local.cfg | grep  dspace.ui.url` confere com o cadastrado no arquivo `[DSPACE_UPGRADE_TOOL]/upgrade-variables.properties`. Caso negativo, refaça a migração com os valores corretos. Isso pode acontecer caso você tenha feito o "backend" apontando para um endereço e o "frontend" apontando para outro endereço.
+- Verifique se o endereço retornado pelo comando `docker exec -it dspace8 cat /dspace/config/local.cfg | grep  dspace.ui.url` confere com o cadastrado no arquivo `[DSPACE_UPGRADE_TOOL]/upgrade-variables.properties`. Caso negativo, refaça a migração com os valores corretos. Isso pode acontecer caso você tenha feito o "backend" apontando para um endereço e o "frontend" apontando para outro endereço.
 
 
 ### Tela branca

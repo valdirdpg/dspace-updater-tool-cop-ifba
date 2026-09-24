@@ -1,0 +1,49 @@
+dspace.name=Repositório IFBA
+default.language = pt_BR
+webui.supported.locales = pt_BR
+
+##### Email settings #####
+# PT_BR: Os valores sensiveis (usuario/senha) e enderecos vem do arquivo .env,
+#        que fica em dspace-install-dir/config/.env e e carregado no container
+#        pelo "env_file" do docker-compose. O DSpace resolve os ${...} a partir
+#        das variaveis de ambiente injetadas por esse .env.
+#        NAO coloque a senha diretamente aqui.
+# SMTP mail server
+mail.server = ${mail_server}
+# SMTP mail server authentication username and password (if required)
+mail.server.username = ${mail_server_username}
+mail.server.password = ${mail_server_password}
+# SMTP mail server alternate port (defaults to 25)
+mail.server.port = ${mail_server_port}
+# From address for mail
+mail.from.address = ${mail_from_address}
+# Currently limited to one recipient!
+feedback.recipient = ${feedback_recipient}
+# General site administration (Webmaster) e-mail
+mail.admin = ${mail_admin}
+# Recipient for server errors and alerts
+alert.recipient = ${alert_recipient}
+# Recipient for new user registration emails
+registration.notify = ${registration_notify}
+# Set the default mail character set.
+mail.charset = ${mail_charset}
+# A comma-separated list of hostnames that are allowed to refer browsers to email forms.
+mail.allowed.referrers = ${dspace.hostname}
+# Pass extra settings to the Java mail library.
+mail.extraproperties = mail.smtp.socketFactory.port=587, \
+                       mail.smtp.starttls.enable=true, \
+                       mail.smtp.starttls.required=true, \
+                       mail.smtp.ssl.protocols=TLSv1.2
+# By setting mail.server.disabled = true, DSpace will not send out emails.
+#mail.server.disabled = false
+
+# NOTA: db.password, db.url, dspace.server.url e dspace.ui.url NAO ficam aqui.
+# Eles sao acrescentados automaticamente pelo backend_build.sh durante o build/upgrade.
+db.password = Fl4xsVpNMdZ2xne
+db.url = jdbc:postgresql://dspace7db.dspacenet:5432/dspace
+dspace.server.url = http://localhost:9080/server
+dspace.ui.url = http://localhost:5000
+db.password = pcC8Xf7aou6pU9Lu
+db.url = jdbc:postgresql://dspace7db.dspacenet:5432/dspace
+dspace.server.url = http://localhost:9080/server
+dspace.ui.url = http://localhost:5000

@@ -1,37 +1,38 @@
-version: '3.7'
-
-
 services:
 
-  dspace7db:
+  dspace8db:
     build:
       context: ../postgres
       dockerfile: Dockerfile
     image:
-      ibict/postgresdspace7
-    container_name: dspace7db
+      ibict/postgresdspace8
+    container_name: dspace8db
     ports:
       - "127.0.0.1:8787:5432"
     environment:
       - POSTGRES_PASSWORD=xxxxx #Postgres password
       - TZ=America/Sao_Paulo
     networks:
-      - dspacenet
+      - dspacenetwork
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
-  dspace7:
-    container_name: dspace7
+  dspace8:
+    container_name: dspace8
+    env_file:
+      # SOMENTE variaveis de e-mail (mail_*). NAO usar o .env completo aqui:
+      # o .env pode conter db.* que sobrescreveria a senha do banco no ambiente
+      # e quebraria a conexao (erro 500). Use o mail.env dedicado.
+      - ../../dspace-install-dir/config/mail.env
     environment:
       dspace__P__dir: /dspace
-      solr__P__server: http://dspace7solr:8983/solr
+      solr__P__server: http://dspace8solr:8983/solr
       TZ: 'America/Sao_Paulo'
       proxies__P__trusted__P__ipranges: '172.23.0'
     build:
       context: .
       dockerfile: Dockerfile
     networks:
-      - dspacenet
+      - dspacenetwork
     ports:
       - published: 8080 #Port for tomcat
         target: 8080
@@ -61,12 +62,12 @@ services:
         catalina.sh run
 
   # DSpace Solr container
-  dspace7solr:
-    container_name: dspace7solr
+  dspace8solr:
+    container_name: dspace8solr
     # Uses official Solr image at https://hub.docker.com/_/solr/
     image: solr:8.11-slim
     networks:
-      dspacenet:
+      dspacenetwork:
     ports:
       - "127.0.0.1:8983:8983"
     stdin_open: true
@@ -106,6 +107,6 @@ volumes:
 
 
 networks:
-  dspacenet:
-    name: dspacenet
+  dspacenetwork:
+    name: dspacenetwork
     driver: bridge

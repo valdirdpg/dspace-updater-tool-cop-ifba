@@ -1,0 +1,52 @@
+#################
+# PT_BR: Abaixo, informe os endereços válidos (acessíveis) do backend.
+# EN: Bellow, fill the address of the dspace's back-end. Important: this address must be valid to be accessed via browser
+# Example: http
+BACKEND_PROTOCOL=http
+# Example: 192.169.5.133
+BACKEND_HOSTNAME=10.1.0.25
+# Example: 8080
+BACKEND_PORT=8080
+# Example: false
+BACKEND_USES_SSL=false
+# PT_BR: Campo não obrigatório. Caso você já tenha um backend do DSpace 7 no git, informe abaixo. Caso contrário, o backend será baixado do repositório oficial do DSpace.
+# EN: Not required. If you have a public git repository of your DSpace 7, inform bellow. Otherwise, the backend will be download from the official DSpace Github's repository.
+BACKEND_ADDRESS_GIT=
+
+#################
+# PT_BR: Também defina estas opções se você estiver usando um proxy reverso
+# EN: Also set these options if you're using a reverse proxy
+# Configurações do Backend com SSL no Proxy
+REVERSE_PROXY_BACKEND_USES_SSL=true
+REVERSE_PROXY_BACKEND_PROTOCOL=https
+REVERSE_PROXY_BACKEND_HOSTNAME=repositorio-teste.ifba.edu.b
+REVERSE_PROXY_BACKEND_PORT=443
+############
+## PT_BR: Configurações do Front-end (Interface gráfica do DSpace)
+## EN: Front-end configuration (DSpace's interface)
+############
+
+#################
+# PT_BR: Abaixo, informe os endereços válidos (acessíveis) do frontend.
+# EN: Bellow, fill the address of the dspace's front-end. Important: this address must be valid to be accessed via browser
+# Example: https
+FRONTEND_PROTOCOL=http
+# Example: repositorio-teste.ifba.edu.br
+FRONTEND_HOSTNAME=10.1.0.25
+# Example: 443
+FRONTEND_PORT=3017
+# FRONTEND_USES_SSL=
+
+# PT_BR: Campo não obrigatório. Caso você já tenha um front-end do DSpace 7 no git, informe abaixo. Caso contrário, o frontend será baixado do repositório oficial do DSpace.
+# EN: Not required. If you have a public git repository of your Angular DSpace 7, inform bellow. Otherwise, the frontend will be download from the official DSpace Github's repository.
+FRONTEND_ADDRESS_GIT=
+
+#################
+# PT_BR: Também defina essas opções se você estiver usando um proxy reverso
+# EN: Also set these options if you're using a reverse proxy
+#################
+# Configurações do Front-end com SSL no Proxy
+REVERSE_PROXY_FRONTEND_USES_SSL=true
+REVERSE_PROXY_FRONTEND_PROTOCOL=https
+REVERSE_PROXY_FRONTEND_HOSTNAME=repositorio-teste.ifba.edu.br
+REVERSE_PROXY_FRONTEND_PORT=443

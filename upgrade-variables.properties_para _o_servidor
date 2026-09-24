@@ -1,0 +1,42 @@
+#################
+# BACKEND (REST API)
+#################
+# PT_BR: Endereco INTERNO do backend (Tomcat), acessivel na rede pelo IP.
+# EN: Internal backend (Tomcat) address, reachable on the network by IP.
+BACKEND_PROTOCOL=http
+BACKEND_HOSTNAME=10.1.0.25
+BACKEND_PORT=8080
+BACKEND_USES_SSL=false
+# PT_BR: Campo nao obrigatorio (repositorio git do backend). Vazio = baixa do DSpace oficial.
+BACKEND_ADDRESS_GIT=
+
+#################
+# Reverse Proxy do Backend (endereco PUBLICO via Nginx Proxy Manager)
+#################
+# PT_BR: O usuario/navegador acessa o backend por https://repositorio-teste.ifba.edu.br/server
+# A porta publica e a 443 (HTTPS), portanto REVERSE_PROXY_BACKEND_PORT fica VAZIO.
+# IMPORTANTE: o NPM precisa ter uma Custom Location "/server" -> http://10.1.0.25:8080
+REVERSE_PROXY_BACKEND_USES_SSL=true
+REVERSE_PROXY_BACKEND_PROTOCOL=https
+REVERSE_PROXY_BACKEND_HOSTNAME=repositorio-teste.ifba.edu.br/server
+REVERSE_PROXY_BACKEND_PORT=
+
+############
+## FRONTEND (Angular)
+############
+# PT_BR: Endereco INTERNO do frontend (container Angular).
+FRONTEND_PROTOCOL=http
+FRONTEND_HOSTNAME=10.1.0.25
+FRONTEND_PORT=3017
+# FRONTEND_USES_SSL=
+
+# PT_BR: Repositorio git do frontend com as customizacoes IFBA (usado no rebuild).
+FRONTEND_ADDRESS_GIT=https://github.com/valdirdpg/dspace-angular-ifba.git
+
+#################
+# Reverse Proxy do Frontend (endereco PUBLICO via Nginx Proxy Manager)
+#################
+# PT_BR: O usuario acessa o frontend por https://repositorio-teste.ifba.edu.br (porta 443 = VAZIO).
+REVERSE_PROXY_FRONTEND_PROTOCOL=https
+REVERSE_PROXY_FRONTEND_HOSTNAME=repositorio-teste.ifba.edu.br
+REVERSE_PROXY_FRONTEND_PORT=
