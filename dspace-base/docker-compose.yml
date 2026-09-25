@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:${POSTGRES_VERSION}-alpine
+    container_name: dspace-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - dspace-network
+
+  dspace:
+    build: .
+    container_name: dspace-app-repositorio
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DSPACE_HOME: ${DSPACE_HOME}
+      JAVA_OPTS: "-Xmx${JAVA_XMX} -Xms${JAVA_XMS}"
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./assetstore:${DSPACE_HOME}/assetstore
+      - ./config:${DSPACE_HOME}/config
+      - ./host_compartilhado:/home/dspace/
+    ports:
+      - "${DSPACE_PORT}:8080"
+    networks:
+      - dspace-network
+
+volumes:
+  postgres_data:
+
+networks:
+  dspace-network:
+    driver: bridge

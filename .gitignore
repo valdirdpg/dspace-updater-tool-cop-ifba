@@ -8,6 +8,7 @@
 /install-variables.properties
 /local.cfg
 /ibict_upgrade-variables.properties
+/dspace-base
 
 # Arquivos .env com dados sensiveis (senha de e-mail, etc.)
 # Inclui o ./.env da raiz (fonte canonica) e o dspace-install-dir/config/.env (gerado).
