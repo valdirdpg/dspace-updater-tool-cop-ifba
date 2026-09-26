@@ -58,10 +58,17 @@ copy_dspace_installation_files() {
   # "env_file" dos docker-compose carrega. Isso impede que linhas db.* ou
   # dspace.*.url (que porventura estejam no .env) sejam injetadas como variaveis
   # de ambiente e sobrescrevam a senha do banco no local.cfg (causa de erro 500).
+  #
+  # IMPORTANTE: o mail.env DEVE existir sempre, pois o "env_file" dos docker-compose
+  # aponta para ele; se faltar, o "docker compose up" aborta e nada sobe. Por isso
+  # garantimos a criacao do diretorio e de um mail.env (ainda que vazio) mesmo quando
+  # nao ha ./.env nem ./.env.EXAMPLE no servidor.
+  mkdir -p dspace-install-dir/config
   if [ -f dspace-install-dir/config/.env ]; then
     grep -E '^(mail_|feedback_recipient|registration_notify|alert_recipient)' \
-      dspace-install-dir/config/.env > dspace-install-dir/config/mail.env
+      dspace-install-dir/config/.env > dspace-install-dir/config/mail.env || true
   fi
+  touch dspace-install-dir/config/mail.env
 } >>./execution.log 2>&1
 }
 # Function to handle backend source (Git clone or GitHub download)

@@ -117,11 +117,15 @@ docker run --rm -v $(pwd)/source/dspace-angular-dspace-8.1/docker:/root intel/qa
   fi
 
   if [ -n "$REVERSE_PROXY_BACKEND_HOSTNAME" ]; then
+    # PT_BR: usa apenas o host (sem eventual "/path"), pois DSPACE_REST_HOST e um
+    # hostname puro. Remove barra e o que vier depois para tolerar valores como
+    # "host/server" informados por engano no arquivo de variaveis.
+    REST_HOST_CLEAN="${REVERSE_PROXY_BACKEND_HOSTNAME%%/*}"
     docker run --rm -v "$(pwd)"/source/dspace-angular-dspace-8.1/docker:/root intel/qat-crypto-base:qatsw-ubuntu \
-      sed -i -E "s/DSPACE_REST_HOST: '(.*)'/DSPACE_REST_HOST: '${REVERSE_PROXY_BACKEND_HOSTNAME}'/g" /root/docker-compose.yml
+      sed -i -E "s|DSPACE_REST_HOST: '(.*)'|DSPACE_REST_HOST: '${REST_HOST_CLEAN}'|g" /root/docker-compose.yml
   else
     docker run --rm -v "$(pwd)"/source/dspace-angular-dspace-8.1/docker:/root intel/qat-crypto-base:qatsw-ubuntu \
-      sed -i -E "s/DSPACE_REST_HOST: '(.*)'/DSPACE_REST_HOST: '${BACKEND_HOSTNAME}'/g" /root/docker-compose.yml
+      sed -i -E "s|DSPACE_REST_HOST: '(.*)'|DSPACE_REST_HOST: '${BACKEND_HOSTNAME}'|g" /root/docker-compose.yml
   fi
 
   if [ -n "$REVERSE_PROXY_BACKEND_PORT" ]; then
@@ -141,12 +145,10 @@ docker run --rm -v $(pwd)/source/dspace-angular-dspace-8.1/docker:/root intel/qa
   docker run --rm -v "$(pwd)"/source/dspace-angular-dspace-8.1:/root intel/qat-crypto-base:qatsw-ubuntu \
     sed -i -E "s/preboot\: false/preboot\: true/g" /root/src/environments/environment.ts
 
-  docker run --rm -v "$(pwd)"/source/dspace-angular-dspace-8.1:/root intel/qat-crypto-base:qatsw-ubuntu \
-    export LANG=pt_BR.UTF-8 && \
+  docker run --rm -e LANG=pt_BR.UTF-8 -v "$(pwd)"/source/dspace-angular-dspace-8.1:/root intel/qat-crypto-base:qatsw-ubuntu \
     sed -i -E "s/Banner do projeto/${REPOSITORY_NAME}/g" /root/src/themes/dspace/app/home-page/home-news/home-news.component.html
 
-  docker run --rm -v "$(pwd)"/source/dspace-angular-dspace-8.1:/root intel/qat-crypto-base:qatsw-ubuntu \
-    export LANG=pt_BR.UTF-8 && \
+  docker run --rm -e LANG=pt_BR.UTF-8 -v "$(pwd)"/source/dspace-angular-dspace-8.1:/root intel/qat-crypto-base:qatsw-ubuntu \
     sed -i -E "s/Descrição do banner/${REPOSITORY_DESCRIPTION}/g" /root/src/themes/dspace/app/home-page/home-news/home-news.component.html
 }
 
@@ -176,8 +178,12 @@ docker run --rm -v $(pwd)/source/dspace-angular-dspace-8.1/docker:/root intel/qa
 # o dominio publico do REST (atras do proxy reverso) para o IP interno do backend.
 # EN: Replace the extra_hosts placeholder so the SSR can resolve the public REST domain to the backend IP.
 if [ -n "$REVERSE_PROXY_BACKEND_HOSTNAME" ]; then
+  # PT_BR: extra_hosts exige o formato "hostname:IP" (hostname puro, sem "/path").
+  # Removemos qualquer "/..." do hostname para tolerar valores como "host/server".
+  # Usamos "|" como delimitador do sed para nao quebrar caso haja barra no valor.
+  PROXY_HOST_CLEAN="${REVERSE_PROXY_BACKEND_HOSTNAME%%/*}"
   docker run --rm -v $(pwd)/source/dspace-angular-dspace-8.1/docker:/root intel/qat-crypto-base:qatsw-ubuntu \
-    sed -i -E "s/REVERSE_PROXY_HOST_ENTRY/${REVERSE_PROXY_BACKEND_HOSTNAME}:${BACKEND_HOSTNAME}/g" /root/docker-compose.yml
+    sed -i -E "s|REVERSE_PROXY_HOST_ENTRY|${PROXY_HOST_CLEAN}:${BACKEND_HOSTNAME}|g" /root/docker-compose.yml
 else
   # Sem proxy reverso: remove a linha placeholder para nao poluir o compose.
   docker run --rm -v $(pwd)/source/dspace-angular-dspace-8.1/docker:/root intel/qat-crypto-base:qatsw-ubuntu \
@@ -195,12 +201,10 @@ docker run --rm -v $(pwd)/source/dspace-angular-dspace-8.1:/root intel/qat-crypt
 docker run --rm -v $(pwd)/source/dspace-angular-dspace-8.1:/root intel/qat-crypto-base:qatsw-ubuntu \
   sed -i -E "s/preboot\: false/preboot\: true/g" /root/src/environments/environment.ts
 
-docker run --rm -v $(pwd)/source/dspace-angular-dspace-8.1:/root intel/qat-crypto-base:qatsw-ubuntu \
-  export LANG=pt_BR.UTF-8 && \
+docker run --rm -e LANG=pt_BR.UTF-8 -v $(pwd)/source/dspace-angular-dspace-8.1:/root intel/qat-crypto-base:qatsw-ubuntu \
   sed -i -E "s/Banner do projeto/${REPOSITORY_NAME}/g" /root/src/themes/dspace/app/home-page/home-news/home-news.component.html
 
-docker run --rm -v $(pwd)/source/dspace-angular-dspace-8.1:/root intel/qat-crypto-base:qatsw-ubuntu \
-  export LANG=pt_BR.UTF-8 && \
+docker run --rm -e LANG=pt_BR.UTF-8 -v $(pwd)/source/dspace-angular-dspace-8.1:/root intel/qat-crypto-base:qatsw-ubuntu \
   sed -i -E "s/Descrição do banner/${REPOSITORY_DESCRIPTION}/g" /root/src/themes/dspace/app/home-page/home-news/home-news.component.html
 
 } >>./execution.log 2>&1
