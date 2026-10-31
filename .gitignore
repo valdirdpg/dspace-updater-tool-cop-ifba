@@ -1,8 +1,10 @@
 /tmp/*
 /dspace-install-dir/*
+/dspace-base/*
 /postgres/*
 /dump-postgres/dump.sql
 /execution.log
 /source/*
 /upgrade-variables.properties
 /ibict_upgrade-variables.properties
+.env
